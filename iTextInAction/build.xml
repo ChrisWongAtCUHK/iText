@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-	<project basedir="." default="build" name="CUSIS">
-	<property name="project-name" value="CUSIS"/>
-	<property name="main-class" value="cusis.CUSISDemo"/>
+	<project basedir="." default="build" name="iTextHelloWorld">
+	<property name="project-name" value="iTextHelloWorld"/>
+	<property name="main-class" value="part1.chapter01.HelloWorld"/>
 	<property name="lib-dir" value="./lib"/>
-	<property name="db-dir" value="./db"/>
-	<property name="db-file" value="info.db"/>
-	<property name="sqlite3-jar" value="sqlite-jdbc-3.7.2.jar" />
-	<property name="class-path" value=".;${lib-dir}/${sqlite3-jar}"/>
+	<property name="itext-jar" value="itextpdf-5.4.3.jar" />
+	<property name="class-path" value=".;${lib-dir}/${itext-jar}"/>
 	<property name="base-dir" value="bin"/>
 
 	<!-- compile the program -->
-	<target name="compile" depends="sql">
+	<target name="compile">
 		<javac includeantruntime="false" srcdir="./src" destdir="${base-dir}" classpath="${class-path}" >
 			<compilerarg value="-Xlint"/>
 		</javac>
 	</target>
 
-	<!-- Build all the jar files -->
+	<!-- Prepare the necessary directories and build all the jar files -->
 	<target name="build" depends="compile" >
 		<mkdir dir="deploy" />
-		<mkdir dir="deploy/${db-dir}" />
-		<copy file="${db-dir}/${db-file}" todir="deploy/${db-dir}" />
+		<mkdir dir="deploy/results" />
+		<mkdir dir="deploy/results/part1" />
+		<mkdir dir="deploy/results/part1/chapter01" />
 		<jar jarfile="deploy/${project-name}.jar" basedir="${base-dir}" includes="**/*.class" >
 			<manifest>
 				<attribute name="Main-Class" value="${main-class}" />
 			</manifest>
-			<zipfileset src="${lib-dir}/${sqlite3-jar}" />
+			<zipfileset src="${lib-dir}/${itext-jar}" />
 		</jar>
 	</target>
 
@@ -33,14 +32,6 @@
 	<target name="run">
 		<java jar="deploy/${project-name}.jar" fork="true" dir="deploy" >
 		</java>
-	</target>
-	
-	<!-- Database management -->
-	<target name="sql">
-		<mkdir dir="${db-dir}"/>
-		<exec dir="${db-dir}" executable="sqlite3" input="${db-dir}/reset.sql">
-			<arg value="${db-file}"/>
-		</exec>
 	</target>
 	
 </project>
