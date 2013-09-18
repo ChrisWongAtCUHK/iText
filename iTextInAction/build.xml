@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-	<project basedir="." default="build" name="iTextHelloWorld">
-	<property name="project-name" value="iTextHelloWorld"/>
-	<property name="main-class" value="part1.chapter01.HelloWorld"/>
+	<project basedir="." default="build" name="iText">
+	<property name="project-name" value="iText"/>
+	<property name="helloworld-main-class" value="part1.chapter01.HelloWorld"/>
+	<property name="helloworldnarrow-main-class" value="part1.chapter01.HelloWorldNarrow"/>
+	<property name="helloworldmaximum-main-class" value="part1.chapter01.HelloWorldMaximum"/>
 	<property name="lib-dir" value="./lib"/>
 	<property name="itext-jar" value="itextpdf-5.4.3.jar" />
 	<property name="class-path" value=".;${lib-dir}/${itext-jar}"/>
@@ -26,25 +28,57 @@
 		</javac>
 	</target>
 
-	<!--  and build all the jar files -->
+	<!--  Build all the jar files -->
 	<target name="build" depends="compile" >
 		<jar jarfile="deploy/${project-name}.jar" basedir="${base-dir}" includes="**/*.class" >
 			<manifest>
-				<attribute name="Main-Class" value="${main-class}" />
 			</manifest>
 			<zipfileset src="${lib-dir}/${itext-jar}" />
 		</jar>
+		
 	</target>
 
-	<!-- Run the jar of program -->
+	<!-- Run the jar of HelloWorld -->
 	<target name="run">
-		<java jar="deploy/${project-name}.jar" fork="true" dir="deploy" >
+		<java classname="${helloworld-main-class}" classpath="deploy/${project-name}.jar" fork="true" dir="deploy" >
 		</java>
 	</target>
 	
-	<!-- Create javadoc-->
+	<!-- Run the jar with HelloWorld -->
+	<target name="hw">
+		<java classname="${helloworld-main-class}" classpath="deploy/${project-name}.jar" fork="true" dir="deploy" >
+		</java>
+	</target>
+		
+	<!-- Run the jar with HelloWorldNarrow -->
+	<target name="hwn">
+		<java classname="${helloworldnarrow-main-class}" classpath="deploy/${project-name}.jar" fork="true" dir="deploy" >
+		</java>
+	</target>
+		
+	<!-- Run the jar with HelloWorldMaximum -->
+	<target name="hwm">
+		<java classname="${helloworldmaximum-main-class}" classpath="deploy/${project-name}.jar" fork="true" dir="deploy" >
+		</java>
+	</target>
+		
+	<!-- Create javadocs -->
 	<target name="doc" depends="prepare">
-		<javadoc sourcepath="src" destdir="docs" classpath="${class-path}">
+		<!-- part1.chapter01.HelloWorld.java -->
+		<mkdir dir="docs" />
+		<javadoc destdir="docs"
+				 classpath="${class-path}">
+			<fileset dir="src" defaultexcludes="yes">
+		      <include name="part1/chapter01/**.java"/>
+			</fileset>
 		</javadoc>
+		
+	</target>
+	
+	<!-- Cleanup deploy -->
+	<target name="clean">
+		<delete>
+			<fileset dir="deploy" includes="**/*.*"/>
+		</delete>
 	</target>
 </project>
